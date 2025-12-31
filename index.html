@@ -7,7 +7,6 @@
     <title>2026 Countdown | Emerald Precise</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -27,7 +26,7 @@
             margin: 0;
         }
 
-        /* Ambient Background - Lebih Gelap untuk Kontras Maksimal */
+        /* Ambient Background */
         .mesh-bg {
             position: absolute;
             top: 0;
@@ -43,31 +42,24 @@
         }
 
         @keyframes moveGradient {
-            0% {
-                background-position: 0% 50%;
-            }
-
-            100% {
-                background-position: 100% 50%;
-            }
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
         }
 
-        /* Glass Panel - Diperbaiki kontrasnya agar teks tajam */
+        /* Glass Panel */
         .glass-panel {
             background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(12px);
-            /* Blur dikurangi agar teks tidak 'berbayang' */
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.12);
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
         }
 
-        /* Typography - Tebal sedikit diperkuat dari 100 ke 200/300 */
+        /* Typography */
         .count-number {
             font-weight: 300;
             letter-spacing: -0.02em;
             filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.3));
-            /* Menambah ketajaman */
         }
 
         .tick-anim {
@@ -75,18 +67,9 @@
         }
 
         @keyframes springPop {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.08);
-                color: #34d399;
-            }
-
-            100% {
-                transform: scale(1);
-            }
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); color: #34d399; }
+            100% { transform: scale(1); }
         }
 
         /* Liquid Metal Text */
@@ -100,9 +83,7 @@
         }
 
         @keyframes shine {
-            to {
-                background-position: 200% center;
-            }
+            to { background-position: 200% center; }
         }
 
         .loader-line {
@@ -121,57 +102,57 @@
 
     <div id="loader-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black">
         <div class="flex flex-col items-center gap-6">
-            <h1 class="text-5xl font-extralight tracking-widest text-white">2026</h1>
-            <div class="w-64 h-[2px] bg-white/10 rounded-full overflow-hidden">
+            <h1 class="text-4xl md:text-5xl font-extralight tracking-widest text-white">2026</h1>
+            <div class="w-48 md:w-64 h-[2px] bg-white/10 rounded-full overflow-hidden">
                 <div id="loader-bar" class="loader-line"></div>
             </div>
-            <span class="text-[10px] tracking-[0.5em] text-emerald-500 uppercase">Initializing System</span>
+            <span class="text-[8px] md:text-[10px] tracking-[0.5em] text-emerald-500 uppercase">Initializing System</span>
         </div>
     </div>
 
     <main id="countdown-container"
-        class="relative z-10 flex flex-col items-center opacity-0 scale-95 transition-all duration-1000">
+        class="relative z-10 flex flex-col items-center w-full px-4 opacity-0 scale-95 transition-all duration-1000">
 
-        <div class="glass-panel px-6 py-2 rounded-full mb-10 border border-emerald-500/20">
-            <span class="text-[11px] font-semibold tracking-[0.3em] uppercase text-emerald-400">Time to New Year</span>
+        <div class="glass-panel px-4 py-1.5 md:px-6 md:py-2 rounded-full mb-6 md:mb-10 border border-emerald-500/20">
+            <span class="text-[10px] md:text-[11px] font-semibold tracking-[0.2em] md:tracking-[0.3em] uppercase text-emerald-400">Time to New Year</span>
         </div>
 
-        <div class="glass-panel p-10 md:p-16 rounded-[2.5rem] flex gap-8 md:gap-16 items-center">
+        <div class="glass-panel p-8 md:p-16 rounded-[2rem] md:rounded-[2.5rem] grid grid-cols-2 md:flex gap-y-10 gap-x-4 md:gap-16 items-center justify-center w-full max-w-[90%] md:max-w-none mx-auto">
 
             <div class="flex flex-col items-center">
-                <span id="days" class="count-number text-6xl md:text-9xl tabular-nums text-white">00</span>
-                <span class="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mt-4">Days</span>
+                <span id="days" class="count-number text-5xl sm:text-6xl md:text-9xl tabular-nums text-white">00</span>
+                <span class="text-[10px] md:text-xs font-bold text-white/40 uppercase tracking-[0.2em] mt-2 md:mt-4">Days</span>
             </div>
 
-            <div class="h-20 w-px bg-white/10"></div>
+            <div class="hidden md:block h-20 w-px bg-white/10"></div>
 
             <div class="flex flex-col items-center">
-                <span id="hours" class="count-number text-6xl md:text-9xl tabular-nums text-white">00</span>
-                <span class="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mt-4">Hours</span>
+                <span id="hours" class="count-number text-5xl sm:text-6xl md:text-9xl tabular-nums text-white">00</span>
+                <span class="text-[10px] md:text-xs font-bold text-white/40 uppercase tracking-[0.2em] mt-2 md:mt-4">Hours</span>
             </div>
 
-            <div class="h-20 w-px bg-white/10"></div>
+            <div class="hidden md:block h-20 w-px bg-white/10"></div>
 
             <div class="flex flex-col items-center">
-                <span id="minutes" class="count-number text-6xl md:text-9xl tabular-nums text-white">00</span>
-                <span class="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mt-4">Mins</span>
+                <span id="minutes" class="count-number text-5xl sm:text-6xl md:text-9xl tabular-nums text-white">00</span>
+                <span class="text-[10px] md:text-xs font-bold text-white/40 uppercase tracking-[0.2em] mt-2 md:mt-4">Mins</span>
             </div>
 
-            <div class="h-20 w-px bg-white/10"></div>
+            <div class="hidden md:block h-20 w-px bg-white/10"></div>
 
             <div class="flex flex-col items-center">
                 <span id="seconds"
-                    class="count-number text-6xl md:text-9xl tabular-nums text-emerald-400 drop-shadow-[0_0_25px_rgba(52,211,153,0.4)]">00</span>
-                <span class="text-xs font-bold text-emerald-500/60 uppercase tracking-[0.2em] mt-4">Secs</span>
+                    class="count-number text-5xl sm:text-6xl md:text-9xl tabular-nums text-emerald-400 drop-shadow-[0_0_25px_rgba(52,211,153,0.4)]">00</span>
+                <span class="text-[10px] md:text-xs font-bold text-emerald-500/60 uppercase tracking-[0.2em] mt-2 md:mt-4">Secs</span>
             </div>
 
         </div>
     </main>
 
     <div id="celebration-container"
-        class="fixed inset-0 z-20 hidden flex-col items-center justify-center bg-black/80 backdrop-blur-md opacity-0 transition-opacity duration-1000">
-        <h1 class="text-[18vw] font-bold tracking-tighter liquid-metal">2026</h1>
-        <p class="text-white/70 text-xl tracking-[0.8em] uppercase mt-4">The Future is Here</p>
+        class="fixed inset-0 z-20 hidden flex-col items-center justify-center bg-black/80 backdrop-blur-md opacity-0 transition-opacity duration-1000 px-4 text-center">
+        <h1 class="text-[18vw] font-bold tracking-tighter liquid-metal leading-none">2026</h1>
+        <p class="text-white/70 text-sm md:text-xl tracking-[0.5em] md:tracking-[0.8em] uppercase mt-4">The Future is Here</p>
     </div>
 
     <script>
