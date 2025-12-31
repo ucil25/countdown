@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 Countdown | Emerald Precise</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --font-stack: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+            --spring-easing: cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        body {
+            font-family: var(--font-stack);
+            background-color: #000000;
+            overflow: hidden;
+            color: white;
+            margin: 0;
+        }
+
+        /* Ambient Background - Lebih Gelap untuk Kontras Maksimal */
+        .mesh-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            background: radial-gradient(at 0% 0%, hsla(160, 80%, 5%, 1) 0, transparent 50%),
+                radial-gradient(at 50% 0%, hsla(150, 60%, 10%, 1) 0, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(170, 70%, 5%, 1) 0, transparent 50%);
+            background-size: 200% 200%;
+            animation: moveGradient 20s ease infinite alternate;
+        }
+
+        @keyframes moveGradient {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        /* Glass Panel - Diperbaiki kontrasnya agar teks tajam */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(12px);
+            /* Blur dikurangi agar teks tidak 'berbayang' */
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
+        }
+
+        /* Typography - Tebal sedikit diperkuat dari 100 ke 200/300 */
+        .count-number {
+            font-weight: 300;
+            letter-spacing: -0.02em;
+            filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.3));
+            /* Menambah ketajaman */
+        }
+
+        .tick-anim {
+            animation: springPop 0.4s var(--spring-easing);
+        }
+
+        @keyframes springPop {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.08);
+                color: #34d399;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Liquid Metal Text */
+        .liquid-metal {
+            background: linear-gradient(135deg, #fff 0%, #34d399 50%, #fff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shine 5s linear infinite;
+        }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .loader-line {
+            width: 0%;
+            height: 2px;
+            background: #10b981;
+            box-shadow: 0 0 15px #10b981;
+            transition: width 2s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+    </style>
+</head>
+
+<body class="h-screen w-full flex items-center justify-center antialiased">
+
+    <div class="mesh-bg"></div>
+
+    <div id="loader-screen" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black">
+        <div class="flex flex-col items-center gap-6">
+            <h1 class="text-5xl font-extralight tracking-widest text-white">2026</h1>
+            <div class="w-64 h-[2px] bg-white/10 rounded-full overflow-hidden">
+                <div id="loader-bar" class="loader-line"></div>
+            </div>
+            <span class="text-[10px] tracking-[0.5em] text-emerald-500 uppercase">Initializing System</span>
+        </div>
+    </div>
+
+    <main id="countdown-container"
+        class="relative z-10 flex flex-col items-center opacity-0 scale-95 transition-all duration-1000">
+
+        <div class="glass-panel px-6 py-2 rounded-full mb-10 border border-emerald-500/20">
+            <span class="text-[11px] font-semibold tracking-[0.3em] uppercase text-emerald-400">Time to New Year</span>
+        </div>
+
+        <div class="glass-panel p-10 md:p-16 rounded-[2.5rem] flex gap-8 md:gap-16 items-center">
+
+            <div class="flex flex-col items-center">
+                <span id="days" class="count-number text-6xl md:text-9xl tabular-nums text-white">00</span>
+                <span class="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mt-4">Days</span>
+            </div>
+
+            <div class="h-20 w-px bg-white/10"></div>
+
+            <div class="flex flex-col items-center">
+                <span id="hours" class="count-number text-6xl md:text-9xl tabular-nums text-white">00</span>
+                <span class="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mt-4">Hours</span>
+            </div>
+
+            <div class="h-20 w-px bg-white/10"></div>
+
+            <div class="flex flex-col items-center">
+                <span id="minutes" class="count-number text-6xl md:text-9xl tabular-nums text-white">00</span>
+                <span class="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mt-4">Mins</span>
+            </div>
+
+            <div class="h-20 w-px bg-white/10"></div>
+
+            <div class="flex flex-col items-center">
+                <span id="seconds"
+                    class="count-number text-6xl md:text-9xl tabular-nums text-emerald-400 drop-shadow-[0_0_25px_rgba(52,211,153,0.4)]">00</span>
+                <span class="text-xs font-bold text-emerald-500/60 uppercase tracking-[0.2em] mt-4">Secs</span>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="celebration-container"
+        class="fixed inset-0 z-20 hidden flex-col items-center justify-center bg-black/80 backdrop-blur-md opacity-0 transition-opacity duration-1000">
+        <h1 class="text-[18vw] font-bold tracking-tighter liquid-metal">2026</h1>
+        <p class="text-white/70 text-xl tracking-[0.8em] uppercase mt-4">The Future is Here</p>
+    </div>
+
+    <script>
+        const TARGET_DATE = new Date("January 1, 2026 00:00:00").getTime();
+
+        const loader = document.getElementById("loader-screen");
+        const loaderBar = document.getElementById("loader-bar");
+        const container = document.getElementById("countdown-container");
+        const celeb = document.getElementById("celebration-container");
+
+        // Loader Sequence
+        window.onload = () => {
+            setTimeout(() => loaderBar.style.width = "100%", 100);
+            setTimeout(() => {
+                loader.style.opacity = "0";
+                setTimeout(() => {
+                    loader.style.display = "none";
+                    container.style.opacity = "1";
+                    container.style.transform = "scale(1)";
+                    startCountdown();
+                }, 1000);
+            }, 2500);
+        };
+
+        function startCountdown() {
+            const update = () => {
+                const now = new Date().getTime();
+                const diff = TARGET_DATE - now;
+
+                if (diff <= 0) {
+                    showCelebration();
+                    return;
+                }
+
+                const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+
+                const fmt = (n) => n < 10 ? '0' + n : n;
+
+                document.getElementById("days").innerText = fmt(d);
+                document.getElementById("hours").innerText = fmt(h);
+                document.getElementById("minutes").innerText = fmt(m);
+
+                const secEl = document.getElementById("seconds");
+                if (secEl.innerText != fmt(s)) {
+                    secEl.innerText = fmt(s);
+                    secEl.classList.remove('tick-anim');
+                    void secEl.offsetWidth;
+                    secEl.classList.add('tick-anim');
+                }
+
+                requestAnimationFrame(update);
+            };
+            update();
+        }
+
+        function showCelebration() {
+            container.style.display = "none";
+            celeb.style.display = "flex";
+            setTimeout(() => {
+                celeb.style.opacity = "1";
+                const end = Date.now() + 15000;
+                const colors = ['#10b981', '#ffffff', '#059669'];
+                (function frame() {
+                    confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: colors });
+                    confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: colors });
+                    if (Date.now() < end) requestAnimationFrame(frame);
+                }());
+            }, 100);
+        }
+    </script>
+</body>
+
+</html>
